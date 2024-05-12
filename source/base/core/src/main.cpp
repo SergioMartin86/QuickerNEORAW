@@ -79,6 +79,17 @@ int main(int argc, char *argv[]) {
 #endif
 
 
+void initializeVideo()
+{
+   stub->init("");
+}
+
+void finalizeVideo()
+{
+   stub->destroy();
+}
+
+
 /*
    Game was originally made with 16. SIXTEEN colors. Running on 320x200 (64,000 pixels.)
 

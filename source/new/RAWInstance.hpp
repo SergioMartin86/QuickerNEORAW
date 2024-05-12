@@ -9,7 +9,7 @@
 #include <jaffarCommon/serializers/contiguous.hpp>
 #include <jaffarCommon/deserializers/base.hpp>
 
-namespace raw
+namespace rawspace
 {
 
 class EmuInstance : public EmuInstanceBase
@@ -89,7 +89,7 @@ class EmuInstance : public EmuInstanceBase
 
   uint8_t* getRamPointer() const override { return nullptr; }
 
-  void advanceStateImpl(raw::Controller controller) override
+  void advanceStateImpl(rawspace::Controller controller) override
   {
     const auto& input = controller.getInput();
 
@@ -99,4 +99,4 @@ class EmuInstance : public EmuInstanceBase
 
 };
 
-} // namespace raw
+} // namespace rawspace

@@ -61,12 +61,8 @@ struct SDLStub : System {
 };
 
 void SDLStub::init(const char *title) {
-	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
+	SDL_Init(SDL_INIT_VIDEO);
 //	SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
-	SDL_ShowCursor(SDL_DISABLE);
-
-	SDL_ShowCursor( SDL_ENABLE );
-	SDL_CaptureMouse(SDL_TRUE);
 
 	memset(&input, 0, sizeof(input));
   _scale = DEFAULT_SCALE;

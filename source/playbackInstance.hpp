@@ -19,7 +19,7 @@ class PlaybackInstance
   public:
 
   // Initializes the playback module instance
-  PlaybackInstance(raw::EmuInstance *emu, const std::vector<std::string> &sequence, const std::string& cycleType) :
+  PlaybackInstance(rawspace::EmuInstance *emu, const std::vector<std::string> &sequence, const std::string& cycleType) :
    _emu(emu)
   {
     // Getting full state size
@@ -162,7 +162,7 @@ class PlaybackInstance
   std::vector<stepData_t> _stepSequence;
 
   // Pointer to the contained emulator instance
-  raw::EmuInstance *const _emu;
+  rawspace::EmuInstance *const _emu;
 
   // Full size of the game state
   size_t _fullStateSize;

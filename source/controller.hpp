@@ -7,7 +7,7 @@
 #include <string>
 #include <sstream>
 
-namespace raw
+namespace rawspace
 {
 
 class Controller

@@ -10,7 +10,7 @@
 
 #include "controller.hpp"
 
-namespace raw
+namespace rawspace
 {
 
 class EmuInstanceBase
@@ -94,7 +94,7 @@ class EmuInstanceBase
   protected:
 
   virtual bool loadROMImpl(const std::string &romData) = 0;
-  virtual void advanceStateImpl(const raw::Controller controller) = 0;
+  virtual void advanceStateImpl(const rawspace::Controller controller) = 0;
 
   virtual void enableStateBlockImpl(const std::string& block) {};
   virtual void disableStateBlockImpl(const std::string& block) {};
@@ -116,4 +116,4 @@ class EmuInstanceBase
   size_t _differentialStateSize;
 };
 
-} // namespace raw
+} // namespace rawspace

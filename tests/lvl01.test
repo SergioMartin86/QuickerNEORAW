@@ -1,0 +1,10 @@
+{
+  "Initial State File": "",
+  "Disable State Blocks": [  ],
+  "Differential Compression":
+  {
+    "Enabled": false,
+    "Max Differences": 2200,
+    "Use Zlib": true
+  }
+}
