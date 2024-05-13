@@ -1,4 +1,5 @@
 *.nes
+gameData
 callgrind*
 *.a26
 *.32x

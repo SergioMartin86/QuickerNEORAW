@@ -43,7 +43,8 @@ static bool parseOption(const char *arg, const char *longCmd, const char **opt) 
 	An Abstract Class pointer pointing to the implementation on the Heap.
 */
 //extern System *System_SDL_create();
-extern System *stub ;//= System_SDL_create();
+extern thread_local System *stub ;//= System_SDL_create();
+thread_local Engine* e;
 
 #ifdef __USE_RAW_MAIN
 int main(int argc, char *argv[]) {
@@ -65,7 +66,7 @@ int main(int argc, char *argv[]) {
 	//g_debugMask = DBG_INFO; // DBG_VM | DBG_BANK | DBG_VIDEO | DBG_SER | DBG_SND
 	//g_debugMask = 0 ;//DBG_INFO |  DBG_VM | DBG_BANK | DBG_VIDEO | DBG_SER | DBG_SND ;
 	
-	Engine* e = new Engine(stub, dataPath, savePath);
+	e = new Engine(stub, dataPath, savePath);
 	e->init();
 	e->run();
 
@@ -77,17 +78,6 @@ int main(int argc, char *argv[]) {
 	return 0;
 }
 #endif
-
-
-void initializeVideo()
-{
-   stub->init("");
-}
-
-void finalizeVideo()
-{
-   stub->destroy();
-}
 
 
 /*

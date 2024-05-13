@@ -9,8 +9,11 @@
 #include <jaffarCommon/serializers/contiguous.hpp>
 #include <jaffarCommon/deserializers/base.hpp>
 
-extern void initializeVideo();
-extern void finalizeVideo();
+#include <engine.h>
+#include <sys.h>
+
+extern thread_local System *stub ;//= System_SDL_create();
+extern thread_local Engine* e;
 
 namespace rawspace
 {
@@ -19,16 +22,19 @@ class EmuInstance : public EmuInstanceBase
 {
  public:
 
- EmuInstance() : EmuInstanceBase()
- {
- }
+  EmuInstance(const std::string& gameDataPath) : EmuInstanceBase()
+  {
+    e = new Engine(stub, gameDataPath.c_str(), "");
+  }
 
- ~EmuInstance()
- {
- }
+  ~EmuInstance()
+  {
+    delete e;
+  }
 
   virtual void initialize() override
   {
+    e->init();
   }
 
   virtual bool loadROMImpl(const std::string &romFilePath) override
@@ -38,12 +44,12 @@ class EmuInstance : public EmuInstanceBase
 
   void initializeVideoOutput() override
   {
-    ::initializeVideo();
+    stub->init("");
   }
 
   void finalizeVideoOutput() override
   {
-    ::finalizeVideo();
+    stub->destroy();
   }
 
   void enableRendering() override
@@ -91,12 +97,17 @@ class EmuInstance : public EmuInstanceBase
 
   std::string getCoreName() const override { return "RAW"; }
 
-  uint8_t* getRamPointer() const override { return nullptr; }
+  uint8_t* getRamPointer() const override { return (uint8_t*)e->vm.vmVariables; }
 
   void advanceStateImpl(rawspace::Controller controller) override
   {
     const auto& input = controller.getInput();
 
+		e->vm.checkThreadRequests();
+
+		e->vm.inp_updatePlayer();
+
+		e->vm.hostFrame();
   }
 
   private:

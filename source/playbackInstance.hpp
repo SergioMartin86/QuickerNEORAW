@@ -87,18 +87,6 @@ class PlaybackInstance
     // Else we load the requested step
     const auto stateData = getStateData(stepId);
 
-    {
-      jaffarCommon::deserializer::Contiguous d(stateData, _fullStateSize);
-      _emu->deserializeState(d);
-    }
-
-    _emu->advanceState("|..|........|");
-
-    {
-      jaffarCommon::deserializer::Contiguous d(stateData, _fullStateSize);
-      _emu->deserializeState(d);
-    }
-    
     // Updating image
     _emu->updateRenderer();
   }

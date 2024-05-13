@@ -34,7 +34,7 @@ class EmuInstanceBase
     
     auto workRam = getRamPointer();
 
-    hash.Update(workRam, 0x800);
+    hash.Update(workRam, 256 * sizeof(int16_t));
 
     jaffarCommon::hash::hash_t result;
     hash.Finalize(reinterpret_cast<uint8_t *>(&result));

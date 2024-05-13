@@ -292,7 +292,7 @@ void VirtualMachine::op_blitFramebuffer() {
 	//WTF ?
 	vmVariables[0xF7] = 0;
 
-	video->updateDisplay(pageId);
+	//video->updateDisplay(pageId);
 }
 
 void VirtualMachine::op_killThread() {
@@ -585,7 +585,7 @@ void VirtualMachine::executeThread() {
 
 void VirtualMachine::inp_updatePlayer() {
 
-	sys->processEvents();
+	// sys->processEvents();
 
 	if (res->currentPartId == 0x3E89) {
 		char c = sys->input.lastChar;

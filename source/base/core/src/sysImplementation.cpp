@@ -296,6 +296,6 @@ void SDLStub::switchGfxMode() {
 	prepareGfxMode();
 }
 
-SDLStub sysImplementation;
-System *stub = &sysImplementation;
+thread_local SDLStub sysImplementation;
+thread_local System *stub = &sysImplementation;
 

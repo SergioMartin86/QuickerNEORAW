@@ -1,6 +1,7 @@
 {
   "Initial State File": "",
   "Disable State Blocks": [  ],
+  "Game Data Path": "gameData",
   "Differential Compression":
   {
     "Enabled": false,

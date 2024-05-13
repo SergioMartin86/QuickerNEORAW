@@ -58,6 +58,9 @@ int main(int argc, char *argv[])
   // Getting initial state file path
   const auto initialStateFilePath = jaffarCommon::json::getString(configJs, "Initial State File");
 
+  // Getting Another World data file path
+  const auto gameDataPath = jaffarCommon::json::getString(configJs, "Game Data Path");
+
   // Getting sequence file path
   std::string sequenceFilePath = program.get<std::string>("sequenceFile");
 
@@ -92,7 +95,7 @@ int main(int argc, char *argv[])
   jaffarCommon::logger::refreshTerminal();
 
   // Creating emulator instance  
-  auto e = rawspace::EmuInstance();
+  auto e = rawspace::EmuInstance(gameDataPath);
 
   // Initializing emulator instance
   e.initialize();
@@ -163,7 +166,7 @@ int main(int argc, char *argv[])
     showFrameInfo = true;
 
     // Get command
-    auto command = jaffarCommon::logger::getKeyPress();
+    auto command = jaffarCommon::logger::waitForKeyPress();
 
     // Advance/Rewind commands
     if (command == 'n') currentStep = currentStep - 1;
