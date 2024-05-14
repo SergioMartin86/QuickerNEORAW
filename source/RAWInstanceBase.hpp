@@ -34,7 +34,8 @@ class EmuInstanceBase
     
     auto workRam = getRamPointer();
 
-    hash.Update(workRam, 512);
+    for (size_t i = 0; i < 512; i++) if (i != 0x18E)
+      hash.Update(workRam[i]);
 
     jaffarCommon::hash::hash_t result;
     hash.Finalize(reinterpret_cast<uint8_t *>(&result));

@@ -140,6 +140,11 @@ int main(int argc, char *argv[])
     // Updating display
     if (disableRender == false) p.renderFrame(currentStep);
 
+    // Loading state
+    auto stateData = p.getStateData(currentStep);
+    jaffarCommon::deserializer::Contiguous d(stateData);
+    e.deserializeState(d);
+
     // Getting input
     const auto &input = p.getStateInput(currentStep);
 
@@ -155,6 +160,21 @@ int main(int argc, char *argv[])
       jaffarCommon::logger::log("[] Current Step #: %lu / %lu\n", currentStep + 1, sequenceLength);
       jaffarCommon::logger::log("[] Input:          %s\n", input.c_str());
       jaffarCommon::logger::log("[] State Hash:     0x%lX%lX\n", hash.first, hash.second);
+
+
+      jaffarCommon::logger::log("[] Memory Values: \n");
+      for (size_t j = 0; j < 16; j++) jaffarCommon::logger::log("%02X ", j);
+      jaffarCommon::logger::log("\n");
+      for (size_t j = 0; j < 16; j++) jaffarCommon::logger::log("---");
+      jaffarCommon::logger::log("\n");
+      for (size_t i = 0; i < 32; i++)
+      {
+        for (size_t j = 0; j < 16; j++)
+        {
+          jaffarCommon::logger::log("%02X ", e.getRamPointer()[i*16 + j]);
+        }
+        jaffarCommon::logger::log(" | %02X\n", i);
+      }
 
       // Only print commands if not in reproduce mode
       if (isReproduce == false) jaffarCommon::logger::log("[] Commands: n: -1 m: +1 | h: -10 | j: +10 | y: -100 | u: +100 | k: -1000 | i: +1000 | s: quicksave | p: play | o: replace ram | q: quit\n");
