@@ -555,6 +555,8 @@ Note: The palettes set used to be allocated on the stack but I moved it to
 	  frames are generated.
 */
 void Video::changePal(uint8_t palNum) {
+ 
+	if (_doRendering == false) return;
 
 	if (palNum >= 32)
 		return;
@@ -565,6 +567,8 @@ void Video::changePal(uint8_t palNum) {
 }
 
 void Video::updateDisplay(uint8_t pageId) {
+
+if (_doRendering == false) return;
 
 	debug(DBG_VIDEO, "Video::updateDisplay(%d)", pageId);
 

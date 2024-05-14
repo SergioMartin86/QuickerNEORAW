@@ -83,6 +83,7 @@ struct Video {
 
 	Ptr _pData;
 	uint8_t *_dataBuf;
+	bool _doRendering = false;
 
 	Video(Resource *res, System *stub);
 	void init();

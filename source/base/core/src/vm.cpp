@@ -292,7 +292,7 @@ void VirtualMachine::op_blitFramebuffer() {
 	//WTF ?
 	vmVariables[0xF7] = 0;
 
-	video->updateDisplay(pageId);
+	if (_doRendering == true) video->updateDisplay(pageId);
 }
 
 void VirtualMachine::op_killThread() {
@@ -462,7 +462,6 @@ void VirtualMachine::hostFrame() {
 
 			//Since .pc is going to be modified by this next loop iteration, we need to save it.
 			threadsData[PC_OFFSET][threadId] = _scriptPtr.pc - res->segBytecode;
-
 
 			debug(DBG_VM, "VirtualMachine::hostFrame() i=0x%02X pos=0x%X", threadId, threadsData[PC_OFFSET][threadId]);
 			if (sys->input.quit) {

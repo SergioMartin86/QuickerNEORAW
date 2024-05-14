@@ -54,7 +54,7 @@ void Engine::init() {
 
 
 	// //Init system
-	sys->init("Out Of This World");
+	// sys->init("Out Of This World");
 
 	video.init();
 

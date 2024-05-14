@@ -90,6 +90,7 @@ struct VirtualMachine {
 	Ptr _scriptPtr;
 	uint8_t _stackPtr;
 	bool gotoNextThread;
+	bool _doRendering = false;
 
 	VirtualMachine(Mixer *mix, Resource *res, SfxPlayer *ply, Video *vid, System *stub);
 	void init();

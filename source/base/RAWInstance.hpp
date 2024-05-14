@@ -49,10 +49,14 @@ class EmuInstance : public EmuInstanceBase
 
   void enableRendering() override
   {
+    e->vm._doRendering = true;
+    e->video._doRendering = true;
   }
 
   void disableRendering() override
   {
+    e->vm._doRendering = false;
+    e->video._doRendering = false;
   }
 
   uint8_t* getPixelsPtr() const override { return stub->getPixelsPtr(); }
