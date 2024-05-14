@@ -53,19 +53,19 @@ class PlaybackInstance
       step.stateData = (uint8_t *)malloc(_fullStateSize);
       memcpy(step.stateData, stateData, _fullStateSize);
 
-      // Adding the step into the sequence
-      _stepSequence.push_back(step);
-
-      // We advance depending on cycle type
-      _emu->advanceState(step.input);
-
       // Storing pixels
-      step.pixelData = (uint8_t *)malloc(_pixelDataSize);
+      step.pixelData = (uint8_t *)calloc(1, _pixelDataSize);
       memcpy(step.pixelData, _pixelDataPtr, _pixelDataSize);
 
       // Storing palette
       step.paletteData = (uint8_t *)malloc(_paletteDataSize);
       memcpy(step.paletteData, _paletteDataPtr, _paletteDataSize);
+      
+      // Adding the step into the sequence
+      _stepSequence.push_back(step);
+
+      // We advance depending on cycle type
+      _emu->advanceState(step.input);
 
       if (cycleType == "Rerecord")
       {
@@ -101,7 +101,7 @@ class PlaybackInstance
     const auto pixelData = getPixelData(stepId);
     memcpy(_pixelDataPtr, pixelData, _pixelDataSize);
 
-    // Loading palette data
+    // // Loading palette data
     const auto paletteData = getPaletteData(stepId);
     memcpy(_paletteDataPtr, paletteData, _paletteDataSize);
 
