@@ -35,7 +35,7 @@ void VirtualMachine::init() {
 
 	memset(vmVariables, 0, sizeof(vmVariables));
 	vmVariables[0x54] = 0x81;
-	vmVariables[VM_VARIABLE_RANDOM_SEED] = time(0);
+	vmVariables[VM_VARIABLE_RANDOM_SEED] = 0;
 #ifdef BYPASS_PROTECTION
    // these 3 variables are set by the game code
    vmVariables[0xBC] = 0x10;
@@ -284,7 +284,7 @@ void VirtualMachine::op_blitFramebuffer() {
   // The virtual machine hence indicate how long the image should be displayed.
 
   if (timeToSleep > 0) {
-    sys->sleep(timeToSleep);
+    //sys->sleep(timeToSleep);
   }
 
   lastTimeStamp = sys->getTimeStamp();
@@ -292,7 +292,7 @@ void VirtualMachine::op_blitFramebuffer() {
 	//WTF ?
 	vmVariables[0xF7] = 0;
 
-	//video->updateDisplay(pageId);
+	video->updateDisplay(pageId);
 }
 
 void VirtualMachine::op_killThread() {
@@ -583,7 +583,7 @@ void VirtualMachine::executeThread() {
 	}
 }
 
-void VirtualMachine::inp_updatePlayer() {
+void VirtualMachine::inp_updatePlayer(bool up, bool down, bool left, bool right, bool fire) {
 
 	// sys->processEvents();
 
@@ -599,26 +599,26 @@ void VirtualMachine::inp_updatePlayer() {
 	int16_t m = 0;
 	int16_t ud = 0;
 
-	if (sys->input.dirMask & PlayerInput::DIR_RIGHT) {
+	if (right) {
 		lr = 1;
 		m |= 1;
 	}
-	if (sys->input.dirMask & PlayerInput::DIR_LEFT) {
+	if (left) {
 		lr = -1;
 		m |= 2;
 	}
-	if (sys->input.dirMask & PlayerInput::DIR_DOWN) {
+	if (down) {
 		ud = 1;
 		m |= 4;
 	}
 
 	vmVariables[VM_VARIABLE_HERO_POS_UP_DOWN] = ud;
 
-	if (sys->input.dirMask & PlayerInput::DIR_UP) {
+	if (up) {
 		vmVariables[VM_VARIABLE_HERO_POS_UP_DOWN] = -1;
 	}
 
-	if (sys->input.dirMask & PlayerInput::DIR_UP) { // inpJump
+	if (up) { // inpJump
 		ud = -1;
 		m |= 8;
 	}
@@ -628,7 +628,7 @@ void VirtualMachine::inp_updatePlayer() {
 	vmVariables[VM_VARIABLE_HERO_POS_MASK] = m;
 	int16_t button = 0;
 
-	if (sys->input.button) { // inpButton
+	if (fire) { // inpButton
 		button = 1;
 		m |= 0x80;
 	}

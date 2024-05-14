@@ -34,28 +34,28 @@ class EmuInstanceBase
     
     auto workRam = getRamPointer();
 
-    hash.Update(workRam, 256 * sizeof(int16_t));
+    hash.Update(workRam, 512);
 
     jaffarCommon::hash::hash_t result;
     hash.Finalize(reinterpret_cast<uint8_t *>(&result));
     return result;
   }
 
-  virtual void initialize() = 0;
+  void initialize()
+  {
+    initializeImpl();
+    _stateSize = getStateSizeImpl();
+  }
+
+  virtual uint8_t* getPixelsPtr() const = 0;
+  virtual size_t getPixelsSize() const = 0;
+  virtual uint8_t* getPalettePtr() const = 0;
+  virtual size_t getPaletteSize() const = 0;
+  virtual void initializeImpl() = 0;
   virtual void initializeVideoOutput() = 0;
   virtual void finalizeVideoOutput() = 0;
   virtual void enableRendering() = 0;
   virtual void disableRendering() = 0;
-
-  inline void loadROM(const std::string &romFilePath)
-  {
-    // Actually loading rom file
-    auto status = loadROMImpl(romFilePath);
-    if (status == false) JAFFAR_THROW_RUNTIME("Could not process ROM file");
-
-    _stateSize = getStateSizeImpl();
-    _differentialStateSize = getDifferentialStateSizeImpl();
-  }
 
   void enableStateBlock(const std::string& block) 
   {
@@ -93,7 +93,6 @@ class EmuInstanceBase
 
   protected:
 
-  virtual bool loadROMImpl(const std::string &romData) = 0;
   virtual void advanceStateImpl(const rawspace::Controller controller) = 0;
 
   virtual void enableStateBlockImpl(const std::string& block) {};

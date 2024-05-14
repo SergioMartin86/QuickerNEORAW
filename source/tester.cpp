@@ -69,17 +69,14 @@ int main(int argc, char *argv[])
   // Parsing script
   const auto configJs = nlohmann::json::parse(configJsRaw);
 
-  // Getting rom file path
-  const auto romFilePath = jaffarCommon::json::getString(configJs, "Rom File");
-
   // Getting initial state file path
   const auto initialStateFilePath = jaffarCommon::json::getString(configJs, "Initial State File");
 
+  // Getting Another World data file path
+  const auto gameDataPath = jaffarCommon::json::getString(configJs, "Game Data Path");
+
   // Getting sequence file path
   std::string sequenceFilePath = program.get<std::string>("sequenceFile");
-
-  // Getting expected ROM SHA1 hash
-  const auto expectedROMSHA1 = jaffarCommon::json::getString(configJs, "Expected ROM SHA1");
 
   // Parsing disabled blocks in lite state serialization
   const auto stateDisabledBlocks = jaffarCommon::json::getArray<std::string>(configJs, "Disable State Blocks");
@@ -104,7 +101,7 @@ int main(int argc, char *argv[])
   const auto differentialCompressionUseZlib = differentialCompressionJs["Use Zlib"].get<bool>();
 
   // Creating emulator instance
-  auto e = rawspace::EmuInstance();
+  auto e = rawspace::EmuInstance(gameDataPath);
 
   // Initializing emulator instance
   e.initialize();
@@ -112,17 +109,6 @@ int main(int argc, char *argv[])
   // Disable rendering
   e.disableRendering();
   
-  // Loading ROM File
-  std::string romFileData;
-  if (romFilePath != "")
-   if (jaffarCommon::file::loadStringFromFile(romFileData, romFilePath) == false) 
-   JAFFAR_THROW_LOGIC("Could not rom file: %s\n", romFilePath.c_str());
-  e.loadROM(romFilePath);
-
-  // Calculating ROM SHA1
-  std::string romSHA1;
-  if (romFilePath != "") romSHA1 = jaffarCommon::hash::getSHA1String(romFileData);
-
   // If an initial state is provided, load it now
   if (initialStateFilePath != "")
   {
@@ -142,9 +128,6 @@ int main(int argc, char *argv[])
   const auto fixedDiferentialStateSize = e.getDifferentialStateSize();
   const auto fullDifferentialStateSize = fixedDiferentialStateSize + differentialCompressionMaxDifferences;
 
-  // Checking with the expected SHA1 hash
-  if (romFilePath != "") if (romSHA1 != expectedROMSHA1) JAFFAR_THROW_LOGIC("Wrong ROM SHA1. Found: '%s', Expected: '%s'\n", romSHA1.c_str(), expectedROMSHA1.c_str());
-
   // Loading sequence file
   std::string sequenceRaw;
   if (jaffarCommon::file::loadStringFromFile(sequenceRaw, sequenceFilePath) == false) JAFFAR_THROW_LOGIC("[ERROR] Could not find or read from input sequence file: %s\n", sequenceFilePath.c_str());
@@ -163,11 +146,6 @@ int main(int argc, char *argv[])
   printf("[] Running Script:                         '%s'\n", scriptFilePath.c_str());
   printf("[] Cycle Type:                             '%s'\n", cycleType.c_str());
   printf("[] Emulation Core:                         '%s'\n", emulationCoreName.c_str());
-  printf("[] ROM File:                               '%s'\n", romFilePath.c_str());
-  if (romFilePath != "")
-  {
-  printf("[] ROM Hash:                               'SHA1: %s'\n", romSHA1.c_str());
-  }
   printf("[] Sequence File:                          '%s'\n", sequenceFilePath.c_str());
   printf("[] Sequence Length:                        %lu\n", sequenceLength);
   printf("[] State Size:                             %lu bytes - Disabled Blocks:  [ %s ]\n", stateSize, stateDisabledBlocksOutput.c_str());

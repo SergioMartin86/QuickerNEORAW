@@ -56,9 +56,15 @@ struct System {
 
 	virtual void init(const char *title) = 0;
 	virtual void destroy() = 0;
-
+ virtual uint8_t* getPixelsPtr() = 0;
+ virtual size_t getPixelsSize() = 0;
+	virtual void updateRenderer() = 0;
 	virtual void setPalette(const uint8_t *buf) = 0;
 	virtual void updateDisplay(const uint8_t *buf) = 0;
+
+	virtual void applyPalette() = 0;
+	virtual uint8_t* getPalettePtr() = 0;
+ virtual size_t getPaletteSize() = 0;
 
 	virtual void processEvents() = 0;
 	virtual void sleep(uint32_t duration) = 0;

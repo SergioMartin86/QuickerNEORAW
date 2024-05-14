@@ -112,6 +112,7 @@ void SfxPlayer::stop() {
 }
 
 void SfxPlayer::handleEvents() {
+	return;
 	MutexStack(sys, _mutex);
 	uint8_t order = _sfxMod.orderTable[_sfxMod.curOrder];
 	const uint8_t *patternData = _sfxMod.data + _sfxMod.curPos + order * 1024;

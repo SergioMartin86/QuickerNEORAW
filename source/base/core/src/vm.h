@@ -127,7 +127,7 @@ struct VirtualMachine {
 	void hostFrame();
 	void executeThread();
 
-	void inp_updatePlayer();
+	void inp_updatePlayer(bool up, bool down, bool left, bool right, bool fire);
 	void inp_handleSpecialKeys();
 	
 	void snd_playSound(uint16_t resNum, uint8_t freq, uint8_t vol, uint8_t channel);

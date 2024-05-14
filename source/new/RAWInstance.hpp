@@ -16,7 +16,7 @@ class EmuInstance : public EmuInstanceBase
 {
  public:
 
- EmuInstance() : EmuInstanceBase()
+ EmuInstance(const std::string& gameDataPath) : EmuInstanceBase()
  {
  }
 
@@ -24,13 +24,8 @@ class EmuInstance : public EmuInstanceBase
  {
  }
 
-  virtual void initialize() override
+  virtual void initializeImpl() override
   {
-  }
-
-  virtual bool loadROMImpl(const std::string &romFilePath) override
-  {
-    return true;
   }
 
   void initializeVideoOutput() override
@@ -65,6 +60,12 @@ class EmuInstance : public EmuInstanceBase
   void updateRenderer() override
   {
   }
+
+  uint8_t* getPalettePtr() const {return nullptr;}
+  size_t getPaletteSize() const {return 0;}
+
+  uint8_t* getPixelsPtr() const override { return nullptr; }
+  size_t getPixelsSize() const override { return 0; }
 
   inline size_t getDifferentialStateSizeImpl() const override { return getStateSizeImpl(); }
 

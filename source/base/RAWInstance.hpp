@@ -32,14 +32,9 @@ class EmuInstance : public EmuInstanceBase
     delete e;
   }
 
-  virtual void initialize() override
+  virtual void initializeImpl() override
   {
     e->init();
-  }
-
-  virtual bool loadROMImpl(const std::string &romFilePath) override
-  {
-    return true;
   }
 
   void initializeVideoOutput() override
@@ -60,21 +55,32 @@ class EmuInstance : public EmuInstanceBase
   {
   }
 
+  uint8_t* getPixelsPtr() const override { return stub->getPixelsPtr(); }
+  size_t getPixelsSize() const override { return stub->getPixelsSize(); }
+  uint8_t* getPalettePtr() const override { return stub->getPalettePtr(); }
+  size_t getPaletteSize() const override { return stub->getPaletteSize(); }
+
   void serializeState(jaffarCommon::serializer::Base& s) const override
   {
+    e->saveGameState(s.getOutputDataBuffer());
+    s.pushContiguous(nullptr, _stateSize);
   }
 
   void deserializeState(jaffarCommon::deserializer::Base& d) override
   {
+    e->loadGameState((uint8_t*)(uint64_t)d.getInputDataBuffer());
+    d.popContiguous(nullptr, _stateSize);
   }
 
   size_t getStateSizeImpl() const override
   {
-    return 0;
+    return e->saveGameState(nullptr);
   }
 
   void updateRenderer() override
   {
+    stub->applyPalette();
+    stub->updateRenderer();
   }
 
   inline size_t getDifferentialStateSizeImpl() const override { return getStateSizeImpl(); }
@@ -105,7 +111,7 @@ class EmuInstance : public EmuInstanceBase
 
 		e->vm.checkThreadRequests();
 
-		e->vm.inp_updatePlayer();
+		e->vm.inp_updatePlayer(input.buttonUp, input.buttonDown, input.buttonLeft, input.buttonRight, input.buttonFire);
 
 		e->vm.hostFrame();
   }

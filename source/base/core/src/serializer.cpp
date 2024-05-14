@@ -17,16 +17,14 @@
  */
 
 #include "serializer.h"
-#include "file.h"
 
 
-Serializer::Serializer(File *stream, Mode mode, uint8_t *ptrBlock, uint16_t saveVer)
-	: _stream(stream), _mode(mode), _ptrBlock(ptrBlock), _saveVer(saveVer) {
+Serializer::Serializer(uint8_t *buffer, Mode mode, uint8_t *ptrBlock, uint16_t saveVer)
+	: _buffer(buffer), _mode(mode), _ptrBlock(ptrBlock), _saveVer(saveVer) {
 }
 
 void Serializer::saveOrLoadEntries(Entry *entry) {
 	debug(DBG_SER, "Serializer::saveOrLoadEntries() _mode=%d", _mode);
-	_bytesCount = 0;
 	switch (_mode) {
 	case SM_SAVE:
 		saveEntries(entry);
@@ -44,12 +42,15 @@ void Serializer::saveEntries(Entry *entry) {
 		if (entry->maxVer == CUR_VER) {
 			switch (entry->type) {
 			case SET_INT:
+			{
 				saveInt(entry->size, entry->data);
 				_bytesCount += entry->size;
+			}
 				break;
 			case SET_ARRAY:
+			{
 				if (entry->size == Serializer::SES_INT8) {
-					_stream->write(entry->data, entry->n);
+					if (entry->data != nullptr) if (_buffer != nullptr) memcpy(&_buffer[_bytesCount], entry->data, entry->n);
 					_bytesCount += entry->n;
 				} else {
 					uint8_t *p = (uint8_t *)entry->data;
@@ -59,11 +60,15 @@ void Serializer::saveEntries(Entry *entry) {
 						_bytesCount += entry->size;
 					}
 				}
+			}
 				break;
 			case SET_PTR:
-				_stream->writeUint32BE(*(uint8_t **)(entry->data) - _ptrBlock);
+			{
+			 uint32_t val = *(uint8_t **)(entry->data) - _ptrBlock;
+				if (_buffer != nullptr) memcpy(&_buffer[_bytesCount], &val, 4);
 				_bytesCount += 4;
 				break;
+				}
 			case SET_END:
 				break;
 			}
@@ -82,7 +87,7 @@ void Serializer::loadEntries(Entry *entry) {
 				break;
 			case SET_ARRAY:
 				if (entry->size == Serializer::SES_INT8) {
-					_stream->read(entry->data, entry->n);
+					if (entry->data != nullptr) if (_buffer != nullptr) memcpy(entry->data, &_buffer[_bytesCount], entry->n);
 					_bytesCount += entry->n;
 				} else {
 					uint8_t *p = (uint8_t *)entry->data;
@@ -94,8 +99,12 @@ void Serializer::loadEntries(Entry *entry) {
 				}
 				break;
 			case SET_PTR:
-				*(uint8_t **)(entry->data) = _ptrBlock + _stream->readUint32BE();
+			{
+			 uint32_t val = 0;
+				if (_buffer != nullptr) memcpy(&val, &_buffer[_bytesCount], 4);
+				*(uint8_t **)(entry->data) = _ptrBlock + val;
 				_bytesCount += 4;
+			}
 				break;
 			case SET_END:
 				break;				
@@ -107,13 +116,22 @@ void Serializer::loadEntries(Entry *entry) {
 void Serializer::saveInt(uint8_t es, void *p) {
 	switch (es) {
 	case 1:
-		_stream->writeByte(*(uint8_t *)p);
+	{
+	  uint8_t val = *(uint8_t *)p;
+		 if (_buffer != nullptr) memcpy(&_buffer[_bytesCount], &val, 1);
+	}
 		break;
 	case 2:
-		_stream->writeUint16BE(*(uint16_t *)p);
+	{
+	  uint16_t val = *(uint16_t *)p;
+		 if (_buffer != nullptr) memcpy(&_buffer[_bytesCount], &val, 2);
+	}
 		break;
 	case 4:
-		_stream->writeUint32BE(*(uint32_t *)p);
+	{
+	  uint32_t val = *(uint32_t *)p;
+		 if (_buffer != nullptr) memcpy(&_buffer[_bytesCount], &val, 4);
+	}
 		break;
 	}
 }
@@ -121,13 +139,25 @@ void Serializer::saveInt(uint8_t es, void *p) {
 void Serializer::loadInt(uint8_t es, void *p) {
 	switch (es) {
 	case 1:
-		*(uint8_t *)p = _stream->readByte();
+	{
+	 uint8_t val = 0;
+		if (_buffer != nullptr) memcpy(&val, &_buffer[_bytesCount], 1);
+		*(uint8_t *)p = val;
+	}
 		break;
 	case 2:
-		*(uint16_t *)p = _stream->readUint16BE();
+	{
+		uint16_t val = 0;
+		if (_buffer != nullptr) memcpy(&val, &_buffer[_bytesCount], 2);
+		*(uint16_t *)p = val;
+	}
 		break;
 	case 4:
-		*(uint32_t *)p = _stream->readUint32BE();
+	{
+		uint32_t val = 0;
+		if (_buffer != nullptr) memcpy(&val, &_buffer[_bytesCount], 4);
+		*(uint32_t *)p = val;
+	}
 		break;
 	}
 }

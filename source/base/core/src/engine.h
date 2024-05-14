@@ -51,8 +51,8 @@ struct Engine {
 	void processInput();
 	
 	void makeGameStateName(uint8_t slot, char *buf);
-	void saveGameState(uint8_t slot, const char *desc);
-	void loadGameState(uint8_t slot);
+	size_t saveGameState(uint8_t* buffer);
+	void loadGameState(uint8_t* buffer);
 };
 
 #endif

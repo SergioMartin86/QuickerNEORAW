@@ -54,7 +54,12 @@ struct SDLStub : System {
 	virtual void destroyMutex(void *mutex);
 	virtual void lockMutex(void *mutex);
 	virtual void unlockMutex(void *mutex);
-
+ virtual uint8_t* getPixelsPtr();
+ virtual size_t getPixelsSize();
+	virtual void updateRenderer();
+	virtual void applyPalette();
+	virtual uint8_t* getPalettePtr();
+ virtual size_t getPaletteSize();
 	void prepareGfxMode();
 	void cleanupGfxMode();
 	void switchGfxMode();
@@ -87,7 +92,12 @@ void SDLStub::setPalette(const uint8_t *p) {
     palette[i].a = 0xFF;
     p += 2;
   }
-  SDL_SetPaletteColors(_screen->format->palette, palette, 0, NUM_COLORS);
+  applyPalette();
+}
+
+void SDLStub::applyPalette()
+{
+	SDL_SetPaletteColors(_screen->format->palette, palette, 0, NUM_COLORS);
 }
 
 void SDLStub::prepareGfxMode() {
@@ -108,8 +118,28 @@ void SDLStub::prepareGfxMode() {
   SDL_SetPaletteColors(_screen->format->palette, palette, 0, NUM_COLORS);
 }
 
+uint8_t* SDLStub::getPalettePtr()
+{
+  return (uint8_t*)palette;
+}
+
+size_t SDLStub::getPaletteSize()
+{
+  return sizeof(palette);
+}
+
+uint8_t* SDLStub::getPixelsPtr()
+{
+  return (uint8_t*)_screen->pixels;
+}
+
+size_t SDLStub::getPixelsSize()
+{
+  return SCREEN_W * SCREEN_H * sizeof(uint8_t);
+}
+
 void SDLStub::updateDisplay(const uint8_t *src) {
-  uint16_t height = SCREEN_H;
+ uint16_t height = SCREEN_H;
 	uint8_t* p = (uint8_t*)_screen->pixels;
 
 	//For each line
@@ -123,12 +153,14 @@ void SDLStub::updateDisplay(const uint8_t *src) {
 		p += _screen->pitch;
     src += SCREEN_W/2;
 	}
+}
 
-  SDL_Texture* texture = SDL_CreateTextureFromSurface(_renderer, _screen);
+void SDLStub::updateRenderer()
+{
+	 SDL_Texture* texture = SDL_CreateTextureFromSurface(_renderer, _screen);
   SDL_RenderCopy(_renderer, texture, nullptr, nullptr);
   SDL_RenderPresent(_renderer);
   SDL_DestroyTexture(texture);
-
 }
 
 void SDLStub::processEvents() {
@@ -216,11 +248,11 @@ void SDLStub::processEvents() {
 }
 
 void SDLStub::sleep(uint32_t duration) {
-	SDL_Delay(duration);
+	// SDL_Delay(duration);
 }
 
 uint32_t SDLStub::getTimeStamp() {
-	return SDL_GetTicks();	
+	return 0;
 }
 
 void SDLStub::startAudio(AudioCallback callback, void *param) {
@@ -249,27 +281,27 @@ uint32_t SDLStub::getOutputSampleRate() {
 }
 
 int SDLStub::addTimer(uint32_t delay, TimerCallback callback, void *param) {
-	return SDL_AddTimer(delay, (SDL_TimerCallback)callback, param);
+	return 0; //SDL_AddTimer(delay, (SDL_TimerCallback)callback, param);
 }
 
 void SDLStub::removeTimer(int timerId) {
-	SDL_RemoveTimer(timerId);
+	// SDL_RemoveTimer(timerId);
 }
 
 void *SDLStub::createMutex() {
-	return SDL_CreateMutex();
+	return nullptr; //SDL_CreateMutex();
 }
 
 void SDLStub::destroyMutex(void *mutex) {
-	SDL_DestroyMutex((SDL_mutex *)mutex);
+	// SDL_DestroyMutex((SDL_mutex *)mutex);
 }
 
 void SDLStub::lockMutex(void *mutex) {
-	SDL_mutexP((SDL_mutex *)mutex);
+	// SDL_mutexP((SDL_mutex *)mutex);
 }
 
 void SDLStub::unlockMutex(void *mutex) {
-	SDL_mutexV((SDL_mutex *)mutex);
+	// SDL_mutexV((SDL_mutex *)mutex);
 }
 
 
