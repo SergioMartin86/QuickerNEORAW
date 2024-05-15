@@ -41,7 +41,6 @@ Video::Video(Resource *resParameter, System *stub)
 }
 
 void Video::init() {
-
 	paletteIdRequested = NO_PALETTE_CHANGE_REQUESTED;
 
 	uint8_t* tmp = (uint8_t *)malloc(4 * VID_PAGE_SIZE);
@@ -81,7 +80,7 @@ void Video::setDataBuffer(uint8_t *dataBuf, uint16_t offset) {
 
 	 This is a recursive function. */
 void Video::readAndDrawPolygon(uint8_t color, uint16_t zoom, const Point &pt) {
-
+if (_doRendering == false) return;
 	uint8_t i = _pData.fetchByte();
 
 	//This is 
@@ -117,7 +116,7 @@ void Video::readAndDrawPolygon(uint8_t color, uint16_t zoom, const Point &pt) {
 }
 
 void Video::fillPolygon(uint16_t color, uint16_t zoom, const Point &pt) {
-
+if (_doRendering == false) return;
 	if (polygon.bbw == 0 && polygon.bbh == 1 && polygon.numPoints == 4) {
 		drawPoint(color, pt.x, pt.y);
 
@@ -161,7 +160,7 @@ void Video::fillPolygon(uint16_t color, uint16_t zoom, const Point &pt) {
 		if (polygon.numPoints == 0) {
 			break;
 		}
-		uint16_t h;
+		uint16_t h = 0;
 		int32_t step1 = calcStep(polygon.points[j + 1], polygon.points[j], h);
 		int32_t step2 = calcStep(polygon.points[i - 1], polygon.points[i], h);
 
@@ -204,7 +203,7 @@ void Video::fillPolygon(uint16_t color, uint16_t zoom, const Point &pt) {
 
 */
 void Video::readAndDrawPolygonHierarchy(uint16_t zoom, const Point &pgc) {
-
+if (_doRendering == false) return;
 	Point pt(pgc);
 	pt.x -= _pData.fetchByte() * zoom / 64;
 	pt.y -= _pData.fetchByte() * zoom / 64;
@@ -243,12 +242,13 @@ void Video::readAndDrawPolygonHierarchy(uint16_t zoom, const Point &pgc) {
 }
 
 int32_t Video::calcStep(const Point &p1, const Point &p2, uint16_t &dy) {
+	if (_doRendering == false) return 0;
 	dy = p2.y - p1.y;
 	return (p2.x - p1.x) * _interpTable[dy] * 4;
 }
 
 void Video::drawString(uint8_t color, uint16_t x, uint16_t y, uint16_t stringId) {
-
+if (_doRendering == false) return;
 	const StrEntry *se = _stringsTableEng;
 
 	//Search for the location where the string is located.
@@ -280,6 +280,7 @@ void Video::drawString(uint8_t color, uint16_t x, uint16_t y, uint16_t stringId)
 }
 
 void Video::drawChar(uint8_t character, uint16_t x, uint16_t y, uint8_t color, uint8_t *buf) {
+	if (_doRendering == false) return;
 	if (x <= 39 && y <= 192) {
 		
 		const uint8_t *ft = _font + (character - ' ') * 8;
@@ -310,6 +311,7 @@ void Video::drawChar(uint8_t character, uint16_t x, uint16_t y, uint8_t color, u
 }
 
 void Video::drawPoint(uint8_t color, int16_t x, int16_t y) {
+	if (_doRendering == false) return;
 	debug(DBG_VIDEO, "drawPoint(%d, %d, %d)", color, x, y);
 	if (x >= 0 && x <= 319 && y >= 0 && y <= 199) {
 		uint16_t off = y * 160 + x / 2;
@@ -339,6 +341,7 @@ void Video::drawPoint(uint8_t color, int16_t x, int16_t y) {
 /* Blend a line in the current framebuffer (_curPagePtr1)
 */
 void Video::drawLineBlend(int16_t x1, int16_t x2, uint8_t color) {
+	if (_doRendering == false) return;
 	debug(DBG_VIDEO, "drawLineBlend(%d, %d, %d)", x1, x2, color);
 	int16_t xmax = MAX(x1, x2);
 	int16_t xmin = MIN(x1, x2);
@@ -373,6 +376,7 @@ void Video::drawLineBlend(int16_t x1, int16_t x2, uint8_t color) {
 }
 
 void Video::drawLineN(int16_t x1, int16_t x2, uint8_t color) {
+	if (_doRendering == false) return;
 	debug(DBG_VIDEO, "drawLineN(%d, %d, %d)", x1, x2, color);
 	int16_t xmax = MAX(x1, x2);
 	int16_t xmin = MIN(x1, x2);
@@ -407,6 +411,7 @@ void Video::drawLineN(int16_t x1, int16_t x2, uint8_t color) {
 }
 
 void Video::drawLineP(int16_t x1, int16_t x2, uint8_t color) {
+	if (_doRendering == false) return;
 	debug(DBG_VIDEO, "drawLineP(%d, %d, %d)", x1, x2, color);
 	int16_t xmax = MAX(x1, x2);
 	int16_t xmin = MIN(x1, x2);
@@ -466,6 +471,7 @@ uint8_t *Video::getPage(uint8_t page) {
 
 
 void Video::changePagePtr1(uint8_t pageID) {
+	if (_doRendering == false) return;
 	debug(DBG_VIDEO, "Video::changePagePtr1(%d)", pageID);
 	_curPagePtr1 = getPage(pageID);
 }
@@ -473,6 +479,7 @@ void Video::changePagePtr1(uint8_t pageID) {
 
 
 void Video::fillPage(uint8_t pageId, uint8_t color) {
+	if (_doRendering == false) return;
 	debug(DBG_VIDEO, "Video::fillPage(%d, %d)", pageId, color);
 	uint8_t *p = getPage(pageId);
 
@@ -486,7 +493,7 @@ void Video::fillPage(uint8_t pageId, uint8_t color) {
 /*  This opcode is used once the background of a scene has been drawn in one of the framebuffer:
 	   it is copied in the current framebuffer at the start of a new frame in order to improve performances. */
 void Video::copyPage(uint8_t srcPageId, uint8_t dstPageId, int16_t vscroll) {
-
+if (_doRendering == false) return;
 	debug(DBG_VIDEO, "Video::copyPage(%d, %d)", srcPageId, dstPageId);
 
 	if (srcPageId == dstPageId)
@@ -521,6 +528,7 @@ void Video::copyPage(uint8_t srcPageId, uint8_t dstPageId, int16_t vscroll) {
 
 
 void Video::copyPage(const uint8_t *src) {
+	if (_doRendering == false) return;
 	debug(DBG_VIDEO, "Video::copyPage()");
 	uint8_t *dst = _pages[0];
 	int h = 200;
@@ -555,9 +563,8 @@ Note: The palettes set used to be allocated on the stack but I moved it to
 	  frames are generated.
 */
 void Video::changePal(uint8_t palNum) {
- 
 	if (_doRendering == false) return;
-
+ 
 	if (palNum >= 32)
 		return;
 	

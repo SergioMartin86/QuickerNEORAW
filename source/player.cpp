@@ -106,9 +106,6 @@ int main(int argc, char *argv[])
   // Initializing video output
   if (disableRender == false) e.initializeVideoOutput();
 
-  // Disabling requested blocks from state serialization
-  for (const auto& block : stateDisabledBlocks) e.disableStateBlock(block);
-
   // If an initial state is provided, load it now
   if (initialStateFilePath != "")
   {
@@ -117,6 +114,9 @@ int main(int argc, char *argv[])
     jaffarCommon::deserializer::Contiguous d(stateFileData.data());
     e.deserializeState(d);
   }
+
+  // Disabling requested blocks from state serialization
+  for (const auto& block : stateDisabledBlocks) e.disableStateBlock(block);
 
   // Creating playback instance
   auto p = PlaybackInstance(&e, sequence, cycleType);
