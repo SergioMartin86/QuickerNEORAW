@@ -101,10 +101,10 @@ int main(int argc, char *argv[])
   const auto differentialCompressionUseZlib = differentialCompressionJs["Use Zlib"].get<bool>();
 
   // Creating emulator instance
-  auto e = rawspace::EmuInstance(gameDataPath);
+  auto e = rawspace::EmuInstance();
 
   // Initializing emulator instance
-  e.initialize();
+  e.initialize(gameDataPath);
 
   // Disable rendering
   e.disableRendering();

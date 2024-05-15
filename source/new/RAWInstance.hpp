@@ -22,9 +22,8 @@ class EmuInstance : public EmuInstanceBase
 {
  public:
 
-  EmuInstance(const std::string& gameDataPath) : EmuInstanceBase()
+  EmuInstance() : EmuInstanceBase()
   {
-    e = new Engine(stub, gameDataPath.c_str(), "");
   }
 
   ~EmuInstance()
@@ -32,8 +31,9 @@ class EmuInstance : public EmuInstanceBase
     delete e;
   }
 
-  virtual void initializeImpl() override
+  virtual void initializeImpl(const std::string& gameDataPath) override
   {
+    e = new Engine(stub, gameDataPath.c_str(), "");
     e->init();
   }
 

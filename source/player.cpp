@@ -95,10 +95,10 @@ int main(int argc, char *argv[])
   jaffarCommon::logger::refreshTerminal();
 
   // Creating emulator instance  
-  auto e = rawspace::EmuInstance(gameDataPath);
+  auto e = rawspace::EmuInstance();
 
   // Initializing emulator instance
-  e.initialize();
+  e.initialize(gameDataPath);
 
   // If rendering enabled, then initailize it now
   if (disableRender == false) e.enableRendering();

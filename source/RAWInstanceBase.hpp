@@ -42,9 +42,9 @@ class EmuInstanceBase
     return result;
   }
 
-  void initialize()
+  void initialize(const std::string& gameDataPath)
   {
-    initializeImpl();
+    initializeImpl(gameDataPath);
     _stateSize = getStateSizeImpl();
   }
 
@@ -52,7 +52,7 @@ class EmuInstanceBase
   virtual size_t getPixelsSize() const = 0;
   virtual uint8_t* getPalettePtr() const = 0;
   virtual size_t getPaletteSize() const = 0;
-  virtual void initializeImpl() = 0;
+  virtual void initializeImpl(const std::string& gameDataPath) = 0;
   virtual void initializeVideoOutput() = 0;
   virtual void finalizeVideoOutput() = 0;
   virtual void enableRendering() = 0;
