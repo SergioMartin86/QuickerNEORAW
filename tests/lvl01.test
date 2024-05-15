@@ -1,6 +1,6 @@
 {
   "Initial State File": "lvl01.state",
-  "Disable State Blocks": [  ],
+  "Disable State Blocks": [ "NVS" ],
   "Game Data Path": "gameData",
   "Differential Compression":
   {
