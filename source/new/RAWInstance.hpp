@@ -31,6 +31,11 @@ class EmuInstance : public EmuInstanceBase
     delete e;
   }
 
+  int16_t* getThreadsData() const override { return (int16_t*)e->vm._scriptStackCalls; }
+  size_t getThreadsDataSize() const override { return VM_NUM_THREADS * sizeof(int16_t*); }
+  int16_t* getScriptStackData() const override { return (int16_t*)e->vm.threadsData; }
+  size_t getScriptStackDataSize() const override { return NUM_DATA_FIELDS * VM_NUM_THREADS * sizeof(int16_t*); }
+
   virtual void initializeImpl(const std::string& gameDataPath) override
   {
     e = new Engine(stub, gameDataPath.c_str(), "");

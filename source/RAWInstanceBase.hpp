@@ -42,6 +42,11 @@ class EmuInstanceBase
     return result;
   }
 
+  virtual int16_t* getThreadsData() const = 0;
+  virtual size_t getThreadsDataSize() const = 0;
+  virtual int16_t* getScriptStackData() const = 0;
+  virtual size_t getScriptStackDataSize() const = 0;
+
   void initialize(const std::string& gameDataPath)
   {
     initializeImpl(gameDataPath);

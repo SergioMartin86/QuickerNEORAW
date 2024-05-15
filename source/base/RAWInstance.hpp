@@ -59,6 +59,11 @@ class EmuInstance : public EmuInstanceBase
     e->video._doRendering = false;
   }
 
+  int16_t* getThreadsData() const override { return (int16_t*)e->vm._scriptStackCalls; }
+  size_t getThreadsDataSize() const override { return VM_NUM_THREADS * sizeof(int16_t*); }
+  int16_t* getScriptStackData() const override { return (int16_t*)e->vm.threadsData; }
+  size_t getScriptStackDataSize() const override { return NUM_DATA_FIELDS * VM_NUM_THREADS * sizeof(int16_t*); }
+
   uint8_t* getPixelsPtr() const override { return stub->getPixelsPtr(); }
   size_t getPixelsSize() const override { return stub->getPixelsSize(); }
   uint8_t* getPalettePtr() const override { return stub->getPalettePtr(); }
