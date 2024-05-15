@@ -27,8 +27,9 @@ jobs:
       run: meson setup build -DonlyOpenSource=true
     - name: Building project
       run: ninja -C build
-    - name: Running tests
-      run: SDL_AUDIODRIVER=dummy SDL_VIDEODRIVER=dummy ninja test -C build
+    # Tests require Another World game files which I cannot upload  
+    #- name: Running tests
+    #  run: SDL_AUDIODRIVER=dummy SDL_VIDEODRIVER=dummy ninja test -C build
     - uses: actions/upload-artifact@v4
       with:
         name: meson-logs
