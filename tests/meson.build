@@ -4,7 +4,7 @@ bash = find_program('bash')
 testTimeout = 240
 
 testSet = [ 
-  
+  'lvl01'
 ]
 
 # Adding tests to the suite
