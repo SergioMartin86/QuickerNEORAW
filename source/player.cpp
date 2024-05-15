@@ -162,16 +162,19 @@ int main(int argc, char *argv[])
       jaffarCommon::logger::log("[] State Hash:     0x%lX%lX\n", hash.first, hash.second);
 
 
+      uint16_t* VMVariables = (uint16_t*)e.getRamPointer();
       jaffarCommon::logger::log("[] Memory Values: \n");
-      for (size_t j = 0; j < 16; j++) jaffarCommon::logger::log("%02X ", j);
+      jaffarCommon::logger::log("[] ");
+      for (size_t j = 0; j < 16; j++) jaffarCommon::logger::log("%04X ", j);
+      jaffarCommon::logger::log("\n[] ");
+      for (size_t j = 0; j < 16; j++) jaffarCommon::logger::log("-----");
       jaffarCommon::logger::log("\n");
-      for (size_t j = 0; j < 16; j++) jaffarCommon::logger::log("---");
-      jaffarCommon::logger::log("\n");
-      for (size_t i = 0; i < 32; i++)
+      for (size_t i = 0; i < 16; i++)
       {
+        jaffarCommon::logger::log("[] ");
         for (size_t j = 0; j < 16; j++)
         {
-          jaffarCommon::logger::log("%02X ", e.getRamPointer()[i*16 + j]);
+          jaffarCommon::logger::log("%04X ", VMVariables[i*16 + j]);
         }
         jaffarCommon::logger::log(" | %02X\n", i);
       }
