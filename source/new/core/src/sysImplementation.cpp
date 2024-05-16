@@ -256,24 +256,24 @@ uint32_t SDLStub::getTimeStamp() {
 }
 
 void SDLStub::startAudio(AudioCallback callback, void *param) {
-	SDL_AudioSpec desired;
-	memset(&desired, 0, sizeof(desired));
+	// SDL_AudioSpec desired;
+	// memset(&desired, 0, sizeof(desired));
 
-	desired.freq = SOUND_SAMPLE_RATE;
-	desired.format = AUDIO_U8;
-	desired.channels = 1;
-	desired.samples = 2048;
-	desired.callback = callback;
-	desired.userdata = param;
-	if (SDL_OpenAudio(&desired, NULL) == 0) {
-		SDL_PauseAudio(0);
-	} else {
-		error("SDLStub::startAudio() unable to open sound device");
-	}
+	// desired.freq = SOUND_SAMPLE_RATE;
+	// desired.format = AUDIO_U8;
+	// desired.channels = 1;
+	// desired.samples = 2048;
+	// desired.callback = callback;
+	// desired.userdata = param;
+	// if (SDL_OpenAudio(&desired, NULL) == 0) {
+	// 	SDL_PauseAudio(0);
+	// } else {
+	// 	error("SDLStub::startAudio() unable to open sound device");
+	// }
 }
 
 void SDLStub::stopAudio() {
-	SDL_CloseAudio();
+	// SDL_CloseAudio();
 }
 
 uint32_t SDLStub::getOutputSampleRate() {
