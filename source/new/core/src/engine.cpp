@@ -45,8 +45,8 @@ void Engine::run() {
 
 Engine::~Engine(){
 
-	finish();
-	sys->destroy();
+	// finish();
+	// sys->destroy();
 }
 
 

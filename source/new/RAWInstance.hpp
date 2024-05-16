@@ -28,7 +28,6 @@ class EmuInstance : public EmuInstanceBase
 
   ~EmuInstance()
   {
-    delete e;
   }
 
   int16_t* getThreadsData() const override { return (int16_t*)e->vm._scriptStackCalls; }
