@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
   jaffarCommon::logger::refreshTerminal();
 
   // Creating emulator instance  
-  auto e = rawspace::EmuInstance();
+  auto e = rawspace::EmuInstance(configJs);
 
   // Initializing emulator instance
   e.initialize(gameDataPath);

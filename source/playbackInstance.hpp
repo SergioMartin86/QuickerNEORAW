@@ -24,6 +24,13 @@ class PlaybackInstance
   PlaybackInstance(rawspace::EmuInstance *emu, const std::vector<std::string> &sequence, const std::string& cycleType) :
    _emu(emu)
   {
+    // Getting input parser from the emulator
+    const auto inputParser = emu->getInputParser();
+
+    // Getting decoded emulator input for each entry in the sequence
+    std::vector<jaffar::input_t> decodedSequence;
+    for (const auto &inputString : sequence) decodedSequence.push_back(inputParser->parseInputString(inputString));
+
     // Getting full state size
     _fullStateSize = _emu->getStateSize();  
 
@@ -65,13 +72,13 @@ class PlaybackInstance
       _stepSequence.push_back(step);
 
       // We advance depending on cycle type
-      _emu->advanceState(step.input);
+      _emu->advanceState(decodedSequence[i]);
 
       if (cycleType == "Rerecord")
       {
         jaffarCommon::deserializer::Contiguous d(stateData, _fullStateSize);
         _emu->deserializeState(d);
-        _emu->advanceState(step.input);
+        _emu->advanceState(decodedSequence[i]);
       }
     }
 

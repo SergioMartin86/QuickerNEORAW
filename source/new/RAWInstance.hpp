@@ -22,7 +22,7 @@ class EmuInstance : public EmuInstanceBase
 {
  public:
 
-  EmuInstance() : EmuInstanceBase()
+  EmuInstance(const nlohmann::json &config) : EmuInstanceBase(config)
   {
   }
 
@@ -124,10 +124,8 @@ void enableStateBlockImpl(const std::string& block)
 
   uint8_t* getRamPointer() const override { return (uint8_t*)e->vm.vmVariables; }
 
-  void advanceStateImpl(rawspace::Controller controller) override
+  void advanceStateImpl(const jaffar::input_t &input) override
   {
-    const auto& input = controller.getInput();
-
 		e->vm.checkThreadRequests();
 
 		e->vm.inp_updatePlayer(input.buttonUp, input.buttonDown, input.buttonLeft, input.buttonRight, input.buttonFire);

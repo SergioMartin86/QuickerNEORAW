@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
   const auto differentialCompressionUseZlib = differentialCompressionJs["Use Zlib"].get<bool>();
 
   // Creating emulator instance
-  auto e = rawspace::EmuInstance();
+  auto e = rawspace::EmuInstance(configJs);
 
   // Initializing emulator instance
   e.initialize(gameDataPath);
@@ -140,6 +140,13 @@ int main(int argc, char *argv[])
 
   // Getting emulation core name
   std::string emulationCoreName = e.getCoreName();
+
+  // Getting input parser from the emulator
+  const auto inputParser = e.getInputParser();
+
+  // Getting decoded emulator input for each entry in the sequence
+  std::vector<jaffar::input_t> decodedSequence;
+  for (const auto &inputString : sequence) decodedSequence.push_back(inputParser->parseInputString(inputString));
 
   // Printing test information
   printf("[] -----------------------------------------\n");
@@ -200,7 +207,7 @@ int main(int argc, char *argv[])
 
   // Actually running the sequence
   auto t0 = std::chrono::high_resolution_clock::now();
-  for (const std::string &input : sequence)
+  for (const auto &input : decodedSequence)
   {
     if (doPreAdvance == true) e.advanceState(input);
     
