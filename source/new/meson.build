@@ -19,6 +19,7 @@ quickerRAWSrc =  [
 
 quickerRAWIncludeDirs = [
  '.',
+ '..',
  'core/src'
 ]
 
