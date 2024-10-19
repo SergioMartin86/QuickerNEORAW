@@ -14,6 +14,7 @@ namespace jaffar
 
 struct input_t
 {
+  bool buttonCode = false;
   bool buttonFire = false;
   bool buttonUp = false;
   bool buttonDown = false;
@@ -61,11 +62,17 @@ public:
     char c;
 
     // Cleaning code
+    input.buttonCode = false;
     input.buttonFire = false;
     input.buttonUp = false;
     input.buttonDown = false;
     input.buttonLeft = false;
     input.buttonRight = false;
+
+    // Code
+    c = ss.get();
+    if (c != '.' && c != 'C') reportBadInputString(inputString);
+    if (c == 'C') input.buttonCode = true;
 
     // Up
     c = ss.get();
