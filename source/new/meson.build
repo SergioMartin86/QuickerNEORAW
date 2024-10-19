@@ -1,6 +1,6 @@
-# quickerRAW Core sources
+# quickerNEORAW Core sources
 
-quickerRAWSrc =  [
+quickerNEORAWSrc =  [
   'core/src/bank.cpp',
   'core/src/sysImplementation.cpp',
   'core/src/file.cpp',
@@ -17,23 +17,23 @@ quickerRAWSrc =  [
   'core/src/mixer.cpp',
 ]
 
-quickerRAWIncludeDirs = [
+quickerNEORAWIncludeDirs = [
  '.',
  '..',
  'core/src'
 ]
 
-quickerRAWCompileArgs = [
+quickerNEORAWCompileArgs = [
   '-DAUTO_DETECT_PLATFORM',
   '-DBYPASS_PROTECTION'
 ]
 
-# quickerRAW Core Configuration
+# quickerNEORAW Core Configuration
 
- quickerRAWDependency = declare_dependency(
-  compile_args        : [  quickerRAWCompileArgs ],
-  include_directories : include_directories(quickerRAWIncludeDirs),
-  sources             : [ quickerRAWSrc ],
+ quickerNEORAWDependency = declare_dependency(
+  compile_args        : [  quickerNEORAWCompileArgs ],
+  include_directories : include_directories(quickerNEORAWIncludeDirs),
+  sources             : [ quickerNEORAWSrc ],
   dependencies        : [  
                           dependency('sdl2',  required : true),
                         ]

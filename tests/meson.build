@@ -13,6 +13,6 @@ foreach testFile : testSet
        bash,
        workdir : meson.current_source_dir(),
        timeout: testTimeout,
-       args : [ 'run_test.sh', baseRAWTester.path(),  quickerRAWTester.path(), testFile + '.test', testFile + '.sol' ],
+       args : [ 'run_test.sh', baseNEORAWTester.path(),  quickerNEORAWTester.path(), testFile + '.test', testFile + '.sol' ],
        suite : [ 'smbc' ])
 endforeach

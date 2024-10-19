@@ -1,4 +1,4 @@
-project('quickerRAW','c','cpp',
+project('quickerNEORAW','c','cpp',
   version: '1.0.0',
   license: 'GPL-3.0-only',
   default_options : ['cpp_std=c++17', 'default_library=shared', 'buildtype=release'],
@@ -23,20 +23,20 @@ jaffarCommonDependency = jaffarCommonSubproject.get_variable('jaffarCommonDepend
 
 if get_option('buildPlayer') == true
 
-  quickerRAWPlayer = executable('quickerRAWPlayer',
+  quickerNEORAWPlayer = executable('quickerNEORAWPlayer',
     'source/player.cpp',
     cpp_args            : [ commonCompileArgs, '-DNCURSES', '-D_JAFFAR_PLAYER' ],
-    dependencies        : [ quickerRAWDependency,
+    dependencies        : [ quickerNEORAWDependency,
                             jaffarCommonDependency
                           ],
     include_directories : include_directories(['source']),
     link_args           : [ '-lncurses' ],
   )
 
-  baseRAWPlayer = executable('baseRAWPlayer',
+  baseNEORAWPlayer = executable('baseNEORAWPlayer',
     'source/player.cpp',
     cpp_args            : [ commonCompileArgs, '-DNCURSES' ],
-    dependencies        : [ baseRAWDependency,
+    dependencies        : [ baseNEORAWDependency,
                             jaffarCommonDependency,
                           ],
     include_directories : include_directories(['source']),
@@ -45,20 +45,20 @@ if get_option('buildPlayer') == true
 
 endif
 
-# Building tester tool for QuickerRAW
+# Building tester tool for QuickerNEORAW
 
-quickerRAWTester = executable('quickerRAWTester',
+quickerNEORAWTester = executable('quickerNEORAWTester',
   'source/tester.cpp',
   cpp_args            : [ commonCompileArgs ], 
-  dependencies        : [ quickerRAWDependency, jaffarCommonDependency ],
+  dependencies        : [ quickerNEORAWDependency, jaffarCommonDependency ],
 )
 
-# Building tester tool for the original RAW
+# Building tester tool for the original NEORAW
 
-baseRAWTester = executable('baseRAWTester',
+baseNEORAWTester = executable('baseNEORAWTester',
   'source/tester.cpp',
   cpp_args            : [ commonCompileArgs ],
-  dependencies        : [ baseRAWDependency, jaffarCommonDependency ],
+  dependencies        : [ baseNEORAWDependency, jaffarCommonDependency ],
 )
 
 # Building tests

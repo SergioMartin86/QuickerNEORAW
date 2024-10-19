@@ -1,6 +1,6 @@
-# baseRAW Core sources
+# baseNEORAW Core sources
 
-baseRAWSrc =  [
+baseNEORAWSrc =  [
   'core/src/bank.cpp',
   'core/src/sysImplementation.cpp',
   'core/src/file.cpp',
@@ -17,22 +17,22 @@ baseRAWSrc =  [
   'core/src/mixer.cpp',
 ]
 
-baseRAWIncludeDirs = [
+baseNEORAWIncludeDirs = [
  '.',
  'core/src'
 ]
 
-baseRAWCompileArgs = [
+baseNEORAWCompileArgs = [
   '-DAUTO_DETECT_PLATFORM',
   '-DBYPASS_PROTECTION'
 ]
 
-# baseRAW Core Configuration
+# baseNEORAW Core Configuration
 
- baseRAWDependency = declare_dependency(
-  compile_args        : [  baseRAWCompileArgs ],
-  include_directories : include_directories(baseRAWIncludeDirs),
-  sources             : [ baseRAWSrc ],
+ baseNEORAWDependency = declare_dependency(
+  compile_args        : [  baseNEORAWCompileArgs ],
+  include_directories : include_directories(baseNEORAWIncludeDirs),
+  sources             : [ baseNEORAWSrc ],
   dependencies        : [  
                           dependency('sdl2',  required : true),
                         ]
