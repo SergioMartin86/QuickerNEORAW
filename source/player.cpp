@@ -4,7 +4,7 @@
 #include <jaffarCommon/logger.hpp>
 #include <jaffarCommon/json.hpp>
 #include "argparse/argparse.hpp"
-#include "RAWInstance.hpp"
+#include "NEORAWInstance.hpp"
 #include "playbackInstance.hpp"
 
 int main(int argc, char *argv[])

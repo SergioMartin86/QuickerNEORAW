@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../RAWInstanceBase.hpp"
+#include "../NEORAWInstanceBase.hpp"
 #include <string>
 #include <vector>
 #include <jaffarCommon/exceptions.hpp>
@@ -110,7 +110,7 @@ class EmuInstance : public EmuInstanceBase
   {
   }
 
-  std::string getCoreName() const override { return "RAW"; }
+  std::string getCoreName() const override { return "NEORAW"; }
 
   uint8_t* getRamPointer() const override { return (uint8_t*)e->vm.vmVariables; }
 

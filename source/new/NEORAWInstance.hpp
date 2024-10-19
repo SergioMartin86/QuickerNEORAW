@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../RAWInstanceBase.hpp"
+#include "../NEORAWInstanceBase.hpp"
 #include <string>
 #include <vector>
 #include <jaffarCommon/exceptions.hpp>
@@ -120,7 +120,7 @@ void enableStateBlockImpl(const std::string& block)
   {
   }
 
-  std::string getCoreName() const override { return "QuickerRAW"; }
+  std::string getCoreName() const override { return "QuickerNEORAW"; }
 
   uint8_t* getRamPointer() const override { return (uint8_t*)e->vm.vmVariables; }
 
